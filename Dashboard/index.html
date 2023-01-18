@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      var d3v7 = window.d3;
+      window.d3 = null;
+    </script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title>Dashboard - Bird Strikes in USA</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 2%;
+        justify-content: center;
+        overflow: scroll;
+      }
+
+      .box-wrapper {
+        height: 95vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      #top-vert {
+        padding: 10px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+      }
+
+      #top-left {
+        flex-grow: 2;
+        margin: 0 8px;
+        border: solid 1px orange;
+      }
+
+      #top-mid {
+        flex-grow: 2;
+        margin: 0 8px;
+        border: solid 1px orange;
+      }
+
+      #top-right {
+        flex-grow: 2;
+        margin: 0 8px;
+        border: solid 1px black;
+      }
+
+      #mid-vert {
+        padding: 10px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+      }
+
+      #mid-mid {
+        padding: 10px;
+        margin: 0 8px;
+        flex-grow: 1;
+        display: flex;
+        border: solid 1px black;
+        flex-direction: row;
+      }
+
+      .slice {
+        cursor: pointer;
+      }
+
+      .slice .main-arc {
+        stroke: #fff;
+        stroke-width: 1px;
+      }
+
+      .slice .hidden-arc {
+        fill: none;
+      }
+
+      .slice text {
+        pointer-events: none;
+        dominant-baseline: middle;
+        text-anchor: middle;
+      }
+
+      .state {
+        stroke-width: 1;
+        stroke: #ffffff;
+      }
+
+      .state:hover {
+        fill: rgb(255, 149, 253);
+        cursor: pointer;
+      }
+
+      path {
+        stroke: white;
+        stroke-width: 0.5px;
+        fill: rgb(170, 101, 254);
+      }
+
+      .line {
+        fill: none;
+        stroke: rgb(170, 101, 254);
+        stroke-width: 1.5px;
+      }
+
+      .bar {
+        fill: rgb(170, 101, 254);
+      }
+
+      .bar:hover {
+        fill: rgb(255, 149, 253);
+      }
+
+      .axis--x path {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="top-vert">
+      <div id="top-left"></div>
+      <div id="top-mid"></div>
+      <div id="top-right"></div>
+    </div>
+    <div id="mid-vert">
+      <div id="mid-mid"></div>
+    </div>
+    <script type="text/javascript">
+      // Making Map Visualisation
+      const width = 700;
+      const height = 500;
+      const svg = d3
+        .select("#top-left")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "black")
+        .attr("viewBox", [0, 0, width, height]);
+
+      const projection = d3
+        .geoAlbersUsa()
+        .translate([width / 2, height / 2]) // translate to center of screen
+        .scale([800]); // scale things down so see entire US
+
+      const path = d3.geoPath().projection(projection);
+      const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+      svg.call(zoom);
+
+      d3.json("us-states.json", function (error, uState) {
+        if (error) throw error;
+        svg
+          .selectAll("path")
+          .data(uState.features)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          .attr("class", "state");
+      });
+
+      d3.csv("../Dataset/Counts.csv", function (data) {
+        svg
+          .selectAll(".airports")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", (d) => projection([d.longitude, d.latitude])[0])
+          .attr("cy", (d) => projection([d.longitude, d.latitude])[1])
+          .attr("r", (d) => d.Count / 40)
+          .attr("fill", "red");
+        svg
+          .selectAll(".airports")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr("x", (d) => projection([d.longitude, d.latitude])[0])
+          .attr("y", (d) => projection([d.longitude, d.latitude])[1])
+          .text((d) => d["Airport Name"])
+          .attr("font-size", "8px")
+          .attr("fill", "pink");
+      });
+
+      function zoomed() {
+        svg
+          .selectAll("path") // To prevent stroke width from scaling
+          .attr("transform", d3.event.transform);
+        svg.selectAll("circle").attr("transform", d3.event.transform);
+        svg.selectAll("text").attr("transform", d3.event.transform);
+        svg2.attr("transform", d3.event.transform);
+      }
+
+      // Making Bar Graph Visualisation
+      d3.csv("../Dataset/Bar.csv", function (data) {
+        var svg2 = d3
+            .select("#top-mid")
+            .append("svg")
+            .attr("width", 700)
+            .attr("height", 500),
+          margin = { top: 20, right: 20, bottom: 30, left: 40 },
+          width = +svg.attr("width") - margin.left - margin.right,
+          height = +svg.attr("height") - margin.top - margin.bottom;
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+          y = d3.scaleLinear().rangeRound([height, 0]);
+
+        var g = svg2
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          )
+          .call(
+            d3.zoom().on("zoom", function () {
+              g.selectAll(".bar").attr("transform", d3.event.transform);
+            })
+          )
+          .append("g");
+
+        x.domain(
+          data.map(function (d) {
+            return d["Phase of flight"];
+          })
+        );
+        y.domain([
+          0,
+          d3.max(data, function (d) {
+            return d.Counts;
+          }),
+        ]);
+
+        svg2.call(zoom);
+
+        g.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+
+        g.append("g")
+          .attr("class", "axis axis--y")
+          .call(d3.axisLeft(y).ticks(10))
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "0.71em")
+          .attr("text-anchor", "end")
+          .text("Frequency");
+
+        g.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", function (d) {
+            return x(d["Phase of flight"]);
+          })
+          .attr("y", function (d) {
+            return y(d.Counts);
+          })
+          .attr("width", x.bandwidth())
+          .attr("height", function (d) {
+            return height - y(d.Counts);
+          });
+      });
+
+      // Making Hierarchy Visualisation
+      d3v7.csv("../Dataset/dataComplete.csv").then(async (data) => {
+        var dt = d3v7.rollup(
+          data,
+          function (d) {
+            return d.length;
+          },
+          function (d) {
+            return d["Origin State"];
+          },
+          function (d) {
+            return d["Aircraft Airline Operator"];
+          }
+        );
+        // console.log(dt);
+        // var root = d3v7.hierarchy(dt).sum(function (d) {
+        //   return d[0];
+        // });
+        // console.log(root);
+        // var pt = d3v7.partition().size([width, height])(root);
+        // console.log(pt);
+        // var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        // var svg7 = d3v7
+        //   .select("#top-right")
+        //   .append("svg")
+        //   .attr("width", width)
+        //   .attr("height", height)
+        //   .attr("fill", "black")
+        //   .attr("viewBox", [0, 0, width, height]);
+        var g3 = svg3
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          );
+      });
+
+      // Making Timeline Visualisation
+      var margin = { top: 10, right: 30, bottom: 30, left: 60 };
+      var svg4 = d3
+        .select("#mid-mid")
+        .append("svg")
+        .attr("width", width + 700 + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      //Read the data
+      d3.csv(
+        "../Dataset/TimeLine.csv",
+
+        function (d) {
+          console.log(d);
+          return { date: d3.timeParse("%Y-%m-%d")(d.date), value: d.value };
+        },
+        function (data) {
+          var x = d3
+            .scaleTime()
+            .domain(
+              d3.extent(data, function (d) {
+                return d.date;
+              })
+            )
+            .range([0, width + 700]);
+          xAxis = svg4
+            .append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+          var y = d3
+            .scaleLinear()
+            .domain([
+              0,
+              d3.max(data, function (d) {
+                return +d.value;
+              }),
+            ])
+            .range([height, 0]);
+          yAxis = svg4.append("g").call(d3.axisLeft(y));
+
+          // Add a clipPath: everything out of this area won't be drawn.
+          var clip = svg4
+            .append("defs")
+            .append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("width", width + 700)
+            .attr("height", height)
+            .attr("x", 0)
+            .attr("y", 0);
+
+          // Add brushing
+          var brush = d3
+            .brushX() // Add the brush feature using the d3.brush function
+            .extent([
+              [0, 0],
+              [width + 700, height],
+            ]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+            .on("end", updateChart); // Each time the brush selection changes, trigger the 'updateChart' function
+
+          // Create the line variable: where both the line and the brush take place
+          var line = svg4.append("g").attr("clip-path", "url(#clip)");
+
+          // Add the line
+          line
+            .append("path")
+            .datum(data)
+            .attr("class", "line") // I add the class line to be able to modify this line later on.
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 1.5)
+            .attr(
+              "d",
+              d3
+                .line()
+                .x(function (d) {
+                  return x(d.date);
+                })
+                .y(function (d) {
+                  return y(d.value);
+                })
+            );
+
+          // Add the brushing
+          line.append("g").attr("class", "brush").call(brush);
+
+          // A function that set idleTimeOut to null
+          var timeout;
+          function idled() {
+            timeout = null;
+          }
+
+          // A function that update the chart for given boundaries
+          function updateChart() {
+            // What are the selected boundaries?
+            extent = d3.event.selection;
+
+            // If no selection, back to initial coordinate. Otherwise, update X axis domain
+            if (!extent) {
+              if (!timeout) return (timeout = setTimeout(idled, 350)); // This allows to wait a little bit
+              x.domain([4, 8]);
+            } else {
+              x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+              line.select(".brush").call(brush.move, null); // This remove the grey brush area as soon as the selection has been done
+            }
+
+            // Update axis and line position
+            xAxis.transition().duration(1000).call(d3.axisBottom(x));
+            line
+              .select(".line")
+              .transition()
+              .duration(1000)
+              .attr(
+                "d",
+                d3
+                  .line()
+                  .x(function (d) {
+                    return x(d.date);
+                  })
+                  .y(function (d) {
+                    return y(d.value);
+                  })
+              );
+          }
+
+          // If user double click, reinitialize the chart
+          svg4.on("dblclick", function () {
+            x.domain(
+              d3.extent(data, function (d) {
+                return d.date;
+              })
+            );
+            xAxis.transition().call(d3.axisBottom(x));
+            line
+              .select(".line")
+              .transition()
+              .attr(
+                "d",
+                d3
+                  .line()
+                  .x(function (d) {
+                    return x(d.date);
+                  })
+                  .y(function (d) {
+                    return y(d.value);
+                  })
+              );
+          });
+        }
+      );
+
+      // Making a hierarchy visualization
+      const maxRadius = Math.min(width, height) / 2 - 5;
+
+      const formatNumber = d3.format(",d");
+
+      const x = d3
+        .scaleLinear()
+        .range([0, 2 * Math.PI])
+        .clamp(true);
+
+      const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
+
+      const color = d3.scaleOrdinal(d3.schemeCategory20);
+
+      const partition = d3.partition();
+
+      const arc = d3
+        .arc()
+        .startAngle((d) => x(d.x0))
+        .endAngle((d) => x(d.x1))
+        .innerRadius((d) => Math.max(0, y(d.y0)))
+        .outerRadius((d) => Math.max(0, y(d.y1)));
+
+      const middleArcLine = (d) => {
+        const halfPi = Math.PI / 2;
+        const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
+        const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+
+        const middleAngle = (angles[1] + angles[0]) / 2;
+        const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
+        if (invertDirection) {
+          angles.reverse();
+        }
+
+        const path = d3.path();
+        path.arc(0, 0, r, angles[0], angles[1], invertDirection);
+        return path.toString();
+      };
+
+      const textFits = (d) => {
+        const CHAR_SPACE = 6;
+
+        const deltaAngle = x(d.x1) - x(d.x0);
+        const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+        const perimeter = r * deltaAngle;
+
+        return d.data.name.length * CHAR_SPACE < perimeter;
+      };
+
+      const svg10 = d3
+        .select("#top-right")
+        .append("svg")
+        .style("width", width)
+        .style("height", height)
+        .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
+        .on("click", () => focusOn()); // Reset zoom on canvas click
+
+      d3.json("../Dataset/hier.json", (error, root) => {
+        if (error) throw error;
+
+        root = d3.hierarchy(root);
+        root.sum((d) => d.value);
+
+        const slice = svg10
+          .selectAll("g.slice")
+          .data(partition(root).descendants());
+
+        slice.exit().remove();
+
+        const newSlice = slice
+          .enter()
+          .append("g")
+          .attr("class", "slice")
+          .on("click", (d) => {
+            d3.event.stopPropagation();
+            focusOn(d);
+          });
+
+        newSlice
+          .append("title")
+          .text((d) => d.data.name + "\n" + formatNumber(d.value));
+
+        newSlice
+          .append("path")
+          .attr("class", "main-arc")
+          .style("fill", (d) => color((d.children ? d : d.parent).data.name))
+          .attr("d", arc);
+
+        newSlice
+          .append("path")
+          .attr("class", "hidden-arc")
+          .attr("id", (_, i) => `hiddenArc${i}`)
+          .attr("d", middleArcLine);
+
+        const text = newSlice
+          .append("text")
+          .attr("display", (d) => (textFits(d) ? null : "none"));
+
+        // Add white contour
+        text
+          .append("textPath")
+          .attr("startOffset", "50%")
+          .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
+          .text((d) => d.data.name)
+          .style("fill", "none")
+          .style("stroke", "#fff")
+          .style("stroke-width", 5)
+          .style("stroke-linejoin", "round");
+
+        text
+          .append("textPath")
+          .attr("startOffset", "50%")
+          .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
+          .text((d) => d.data.name);
+      });
+
+      function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
+        // Reset to top-level if no data point specified
+
+        const transition = svg10
+          .transition()
+          .duration(750)
+          .tween("scale", () => {
+            const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
+              yd = d3.interpolate(y.domain(), [d.y0, 1]);
+            return (t) => {
+              x.domain(xd(t));
+              y.domain(yd(t));
+            };
+          });
+
+        transition
+          .selectAll("path.main-arc")
+          .attrTween("d", (d) => () => arc(d));
+
+        transition
+          .selectAll("path.hidden-arc")
+          .attrTween("d", (d) => () => middleArcLine(d));
+
+        transition
+          .selectAll("text")
+          .attrTween("display", (d) => () => textFits(d) ? null : "none");
+
+        moveStackToFront(d);
+
+        //
+
+        function moveStackToFront(elD) {
+          svg10
+            .selectAll(".slice")
+            .filter((d) => d === elD)
+            .each(function (d) {
+              this.parentNode.appendChild(this);
+              if (d.parent) {
+                moveStackToFront(d.parent);
+              }
+            });
+        }
+      }
+    </script>
+  </body>
+</html>

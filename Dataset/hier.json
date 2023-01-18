@@ -1,0 +1,350 @@
+{
+    "name": "United States",
+    "children": [
+        {
+            "name": "Arizona",
+            "children": [
+                {
+                    "name": "PHOENIX SKY HARBOR",
+                    "value": "111"
+                }
+            ]
+        },
+        {
+            "name": "California",
+            "children": [
+                {
+                    "name": "LOS ANGELES INTL",
+                    "value": "166"
+                },
+                {
+                    "name": "METRO OAKLAND INTL",
+                    "value": "106"
+                },
+                {
+                    "name": "MINETA SAN JOSE INTL",
+                    "value": "120"
+                },
+                {
+                    "name": "SACRAMENTO INTL",
+                    "value": "352"
+                },
+                {
+                    "name": "SAN FRANCISCO INTL ARPT",
+                    "value": "146"
+                }
+            ]
+        },
+        {
+            "name": "Colorado",
+            "children": [
+                {
+                    "name": "DENVER INTL AIRPORT",
+                    "value": "187"
+                }
+            ]
+        },
+        {
+            "name": "DC",
+            "children": [
+                {
+                    "name": "RONALD REAGAN WASHINGTON NATL",
+                    "value": "219"
+                },
+                {
+                    "name": "WASHINGTON DULLES INTL ARPT",
+                    "value": "256"
+                }
+            ]
+        },
+        {
+            "name": "Florida",
+            "children": [
+                {
+                    "name": "FORT LAUDERDALE/HOLLYWOOD INTL",
+                    "value": "93"
+                },
+                {
+                    "name": "ORLANDO INTL",
+                    "value": "153"
+                }
+            ]
+        },
+        {
+            "name": "Georgia",
+            "children": [
+                {
+                    "name": "ATLANTA INTL",
+                    "value": "211"
+                }
+            ]
+        },
+        {
+            "name": "Hawaii",
+            "children": [
+                {
+                    "name": "HONOLULU INTL ARPT",
+                    "value": "135"
+                },
+                {
+                    "name": "LIHUE ARPT",
+                    "value": "217"
+                }
+            ]
+        },
+        {
+            "name": "Illinois",
+            "children": [
+                {
+                    "name": "CHICAGO MIDWAY INTL ARPT",
+                    "value": "75"
+                },
+                {
+                    "name": "CHICAGO O'HARE INTL ARPT",
+                    "value": "430"
+                }
+            ]
+        },
+        {
+            "name": "Indiana",
+            "children": [
+                {
+                    "name": "INDIANAPOLIS INTL",
+                    "value": "144"
+                }
+            ]
+        },
+        {
+            "name": "Kentucky",
+            "children": [
+                {
+                    "name": "CINCINNATI/NORTHERN KENTUCKY INTL ARPT",
+                    "value": "263"
+                },
+                {
+                    "name": "LOUISVILLE INTL ARPT",
+                    "value": "272"
+                }
+            ]
+        },
+        {
+            "name": "Louisiana",
+            "children": [
+                {
+                    "name": "BARKSDALE AIR FORCE BASE ARPT",
+                    "value": "435"
+                },
+                {
+                    "name": "NEW ORLEANS INTL",
+                    "value": "183"
+                }
+            ]
+        },
+        {
+            "name": "Maryland",
+            "children": [
+                {
+                    "name": "BALTIMORE WASH INTL",
+                    "value": "201"
+                }
+            ]
+        },
+        {
+            "name": "Massachusetts",
+            "children": [
+                {
+                    "name": "LOGAN INTL",
+                    "value": "146"
+                }
+            ]
+        },
+        {
+            "name": "Michigan",
+            "children": [
+                {
+                    "name": "DETROIT METRO WAYNE COUNTY ARPT",
+                    "value": "74"
+                }
+            ]
+        },
+        {
+            "name": "Minnesota",
+            "children": [
+                {
+                    "name": "MINNEAPOLIS-ST PAUL INTL",
+                    "value": "103"
+                }
+            ]
+        },
+        {
+            "name": "Missouri",
+            "children": [
+                {
+                    "name": "KANSAS CITY INTL",
+                    "value": "187"
+                },
+                {
+                    "name": "LAMBERT-ST LOUIS INTL",
+                    "value": "189"
+                }
+            ]
+        },
+        {
+            "name": "Nebraska",
+            "children": [
+                {
+                    "name": "EPPLEY AIRFIELD",
+                    "value": "118"
+                }
+            ]
+        },
+        {
+            "name": "New Jersey",
+            "children": [
+                {
+                    "name": "ATLANTIC CITY INTL",
+                    "value": "86"
+                },
+                {
+                    "name": "NEWARK LIBERTY INTL ARPT",
+                    "value": "206"
+                },
+                {
+                    "name": "TETERBORO AIRPORT",
+                    "value": "59"
+                }
+            ]
+        },
+        {
+            "name": "New York",
+            "children": [
+                {
+                    "name": "JOHN F KENNEDY INTL",
+                    "value": "216"
+                },
+                {
+                    "name": "LAGUARDIA NY",
+                    "value": "175"
+                }
+            ]
+        },
+        {
+            "name": "North Carolina",
+            "children": [
+                {
+                    "name": "CHARLOTTE/DOUGLAS INTL ARPT",
+                    "value": "269"
+                }
+            ]
+        },
+        {
+            "name": "Ohio",
+            "children": [
+                {
+                    "name": "CLEVELAND-HOPKINS INTL ARPT",
+                    "value": "98"
+                },
+                {
+                    "name": "PORT COLUMBUS INTL",
+                    "value": "112"
+                }
+            ]
+        },
+        {
+            "name": "Oklahoma",
+            "children": [
+                {
+                    "name": "WILL ROGERS WORLD ARPT",
+                    "value": "83"
+                }
+            ]
+        },
+        {
+            "name": "Oregon",
+            "children": [
+                {
+                    "name": "PORTLAND INTL (OR)",
+                    "value": "245"
+                }
+            ]
+        },
+        {
+            "name": "Pennsylvania",
+            "children": [
+                {
+                    "name": "GREATER PITTSBURGH",
+                    "value": "289"
+                },
+                {
+                    "name": "PHILADELPHIA INTL",
+                    "value": "225"
+                }
+            ]
+        },
+        {
+            "name": "South Carolina",
+            "children": [
+                {
+                    "name": "CHARLESTON AFB/INTL ARPT",
+                    "value": "242"
+                }
+            ]
+        },
+        {
+            "name": "Tennessee",
+            "children": [
+                {
+                    "name": "MEMPHIS INTL",
+                    "value": "272"
+                },
+                {
+                    "name": "NASHVILLE INTL",
+                    "value": "297"
+                }
+            ]
+        },
+        {
+            "name": "Texas",
+            "children": [
+                {
+                    "name": "AUSTIN-BERGSTROM INTL",
+                    "value": "144"
+                },
+                {
+                    "name": "DALLAS/FORT WORTH INTL ARPT",
+                    "value": "908"
+                },
+                {
+                    "name": "GEORGE BUSH INTERCONTINENTAL",
+                    "value": "134"
+                },
+                {
+                    "name": "HOUSTON-HOBBY",
+                    "value": "151"
+                },
+                {
+                    "name": "SAN ANTONIO INTL",
+                    "value": "158"
+                }
+            ]
+        },
+        {
+            "name": "Utah",
+            "children": [
+                {
+                    "name": "SALT LAKE CITY INTL",
+                    "value": "236"
+                }
+            ]
+        },
+        {
+            "name": "Washington",
+            "children": [
+                {
+                    "name": "SEATTLE-TACOMA INTL",
+                    "value": "103"
+                }
+            ]
+        }
+    ]
+}
